@@ -7,6 +7,7 @@ import org.blog.persistence.UserRepository;
 import org.joda.time.Duration;
 import restx.factory.Module;
 import restx.factory.Provides;
+import restx.jongo.JongoFactory;
 import restx.security.BasicPrincipalAuthenticator;
 import restx.security.RestxPrincipal;
 import restx.security.RestxSession;
@@ -52,5 +53,10 @@ public class AppModule {
                 return user;
             }
         };
+    }
+
+    @Provides @Named(JongoFactory.JONGO_DB_NAME)
+    public String dbName() {
+        return "blog-mongo";
     }
 }
