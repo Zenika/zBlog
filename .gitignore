@@ -4,3 +4,9 @@
 *.jar
 *.war
 *.ear
+
+app.log
+/tmp
+
+.idea
+*.iml
