@@ -2,15 +2,12 @@ package org.blog.persistence;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import com.google.common.hash.Hashing;
+import org.blog.domain.User;
+import org.bson.types.ObjectId;
 import restx.admin.AdminModule;
 import restx.factory.Component;
-import restx.security.RestxPrincipal;
+import restx.jongo.JongoCollection;
 
 import javax.inject.Named;
 
@@ -23,68 +20,48 @@ import javax.inject.Named;
 @Component
 public class UserRepository {
 
-    public static class User implements RestxPrincipal {
+    private final JongoCollection users;
 
-        public static final String HELLO_ROLE = "hello-role";
-
-        private final ImmutableSet<String> roles;
-        private final String name;
-        private final String passwordHash;
-
-        public User(String name, String passwordHash, String... roles) {
-            this.name = name;
-            this.passwordHash = passwordHash;
-            this.roles = ImmutableSet.copyOf(roles);
+    public UserRepository(@Named("restx.admin.password") String adminPassword,
+                          @Named("users") JongoCollection users) {
+        this.users = users;
+        if (findUserByName("admin") == null) {
+            createUser(new User("admin", hashPwd(adminPassword), AdminModule.RESTX_ADMIN_ROLE, User.ADMIN_ROLE));
         }
-
-        @Override
-        public ImmutableSet<String> getPrincipalRoles() {
-            return roles;
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
-    }
-
-    private final ImmutableList<User> users;
-
-    public UserRepository(@Named("restx.admin.password") String adminPassword) {
-        users = ImmutableList.of(
-                // admin password is injected, it is defined in AppModule
-                new User("admin", hashPwd(adminPassword),
-                        AdminModule.RESTX_ADMIN_ROLE, User.HELLO_ROLE),
-
-                // define 2 other users
-                new User("user1", hashPwd("user1-pwd"), User.HELLO_ROLE),
-                new User("user2", hashPwd("user2-pwd"))
-            );
     }
 
     private static String hashPwd(String pwd) {
         return Hashing.md5().hashString(pwd, Charsets.UTF_8).toString();
     }
 
-    public Optional<? extends RestxPrincipal> findUserByName(final String name) {
-        return findUserByPredicate(new Predicate<User>() {
-            @Override
-            public boolean apply(User input) {
-                return input==null?false:input.getName().equalsIgnoreCase(name);
-            }
-        });
+    public Iterable<User> findUsers(Optional<String> name) {
+        if (name.isPresent()) {
+            return users.get().find("{name: #}", name.get()).as(User.class);
+        } else {
+            return users.get().find().as(User.class);
+        }
     }
 
-    public Optional<? extends RestxPrincipal> findUserByNameAndPasswordHash(final String name, final String passwordHash) {
-        return findUserByPredicate(new Predicate<User>() {
-            @Override
-            public boolean apply(User input) {
-                return input==null?false:input.name.equalsIgnoreCase(name) && input.passwordHash.equals(passwordHash);
-            }
-        });
+    public Optional<User> findUserByName(final String name) {
+        return Optional.of(users.get().findOne("{name: #}", name).as(User.class));
     }
 
-    private Optional<? extends RestxPrincipal> findUserByPredicate(Predicate<User> predicate) {
-        return Optional.fromNullable(Iterables.getFirst(Collections2.filter(users, predicate), null));
+    public Optional<User> findUserByNameAndPasswordHash(final String name, final String passwordHash) {
+        return Optional.of(users.get().findOne("{name: #, passwordHash: #}", name, passwordHash).as(User.class));
     }
+
+    public User createUser(User user) {
+        users.get().save(user);
+        return user;
+    }
+
+    public User updateUser(User user) {
+        users.get().save(user);
+        return user;
+    }
+
+    public void deleteUser(String oid) {
+        users.get().remove(new ObjectId(oid));
+    }
+
 }
