@@ -1,3 +1,4 @@
 class { 'mongodb':
-  init => 'sysv'
+  init => 'sysv',
+  enable_10gen => true
 }
