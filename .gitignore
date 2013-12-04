@@ -10,3 +10,11 @@ app.log
 
 .idea
 *.iml
+.tmp
+modules
+
+.vagrant
+.librarian
+*.lock
+.tmp/
+modules/
