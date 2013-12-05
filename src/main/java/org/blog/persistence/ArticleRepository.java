@@ -19,7 +19,7 @@ public class ArticleRepository {
 
     public Iterable<Article> findArticles(Optional<String> name) {
         if (name.isPresent()) {
-            return articles.get().find("{name: #}", name.get()).as(Article.class);
+            return articles.get().find("{title: #}", name.get()).as(Article.class);
         } else {
             return articles.get().find().as(Article.class);
         }

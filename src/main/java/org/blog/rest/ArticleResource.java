@@ -6,6 +6,7 @@ import org.blog.persistence.ArticleRepository;
 import restx.Status;
 import restx.annotations.*;
 import restx.factory.Component;
+import restx.security.PermitAll;
 
 import static restx.common.MorePreconditions.checkEquals;
 
@@ -18,9 +19,10 @@ public class ArticleResource {
         this.articleRepository = articleRepository;
     }
 
+    @PermitAll
     @GET("/articles")
-    public Iterable<Article> findArticles(Optional<String> name) {
-        return articleRepository.findArticles(name);
+    public Iterable<Article> findArticles(Optional<String> title) {
+        return articleRepository.findArticles(title);
     }
 
     @POST("/articles")
