@@ -45,7 +45,7 @@ public class AppModule {
             @Override
             public Optional<? extends RestxPrincipal> authenticate(String name, String passwordHash, ImmutableMap<String, ?> principalData) {
                 boolean rememberMe = Boolean.valueOf((String) principalData.get("rememberMe"));
-                Optional<? extends RestxPrincipal> user = userRepository.findUserByNameAndPasswordHash(name, passwordHash);
+                Optional<? extends RestxPrincipal> user = userRepository.findAndCheckCredentials(name, passwordHash);
                 if (user.isPresent()) {
                     RestxSession.current().expires(rememberMe ? Duration.standardDays(30) : Duration.ZERO);
                 }

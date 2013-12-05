@@ -58,6 +58,11 @@
             <version>${restx.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.3m</version>
+        </dependency>
+        <dependency>
             <groupId>io.restx</groupId>
             <artifactId>restx-specs-admin</artifactId>
             <version>${restx.version}</version>

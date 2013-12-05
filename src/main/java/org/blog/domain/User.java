@@ -13,9 +13,13 @@ public class User implements RestxPrincipal   {
     @Id
     @ObjectId
     private String key;
-    private final ImmutableSet<String> roles;
-    private final String name;
-    private final String passwordHash;
+    private ImmutableSet<String> roles;
+    private String name;
+    private String passwordHash;
+
+    public User() {
+
+    }
 
     public User(String name, String passwordHash, String... roles) {
         this.name = name;
@@ -41,6 +45,16 @@ public class User implements RestxPrincipal   {
     @Override
     public String getName() {
         return name;
+    }
+
+    public User setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public User setRoles(final ImmutableSet<String> roles) {
+        this.roles = roles;
+        return this;
     }
 
     @Override

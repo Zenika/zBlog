@@ -20,6 +20,7 @@
             "io.restx:restx-specs-admin:${restx.version}",
             "io.restx:restx-admin:${restx.version}",
             "io.restx:restx-jongo:${restx.version}",
+            "org.mindrot:jbcrypt:0.3m",
             "ch.qos.logback:logback-classic:1.0.9"
         ],
         "test": [
