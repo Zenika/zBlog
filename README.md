@@ -1,44 +1,43 @@
-blog-backend
-============
+# Blog-backend
 
+## Requirements
 
-MongoDB Installation
-====================
+### Install vagrant
 
-Pré-requis
-----------
+Download and install package from [Vagrant](http://downloads.vagrantup.com/)
 
+### Install librarian-puppet
 
-Install vagrant
+   sudo apt-get install ruby-dev
 
-download at http://downloads.vagrantup.com/
+   sudo gem install librarian-puppet puppet
 
+### Download puppet module
 
-Install librarian-puppet
+   librarian-puppet install
 
- sudo apt-get install ruby-dev,
+### Boot & provision the VM
 
- sudo gem install librarian-puppet puppet
+   vagrant up
 
-Download puppet module
+### Install RestX
 
- librarian-puppet install
+   curl -s http://restx.io/install.sh | sh
 
-Boot & provision the VM
+## Start application
 
- vagrant up
+### Via RestX shell
 
-Install RestX
-
- curl -s http://restx.io/install.sh | sh
-
-
-Launch RestX Shell
-
- restx
+   restx
 
 Launch Application
 
- app run
+   app run
 
 enter 'stop' to stop the running application
+
+### Via IDE
+
+Start the main from org.blog.AppServer
+
+Remember to follow documentation from [Restx.io](http://restx.io/docs/ide.html) to handle IDE integration
