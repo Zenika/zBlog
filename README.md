@@ -8,31 +8,31 @@ Download and install package from [Vagrant](http://downloads.vagrantup.com/)
 
 ### Install librarian-puppet
 
-   sudo apt-get install ruby-dev
+    sudo apt-get install ruby-dev
 
-   sudo gem install librarian-puppet puppet
+    sudo gem install librarian-puppet puppet
 
 ### Download puppet module
 
-   librarian-puppet install
+    librarian-puppet install
 
 ### Boot & provision the VM
 
-   vagrant up
+    vagrant up
 
 ### Install RestX
 
-   curl -s http://restx.io/install.sh | sh
+    curl -s http://restx.io/install.sh | sh
 
 ## Start application
 
 ### Via RestX shell
 
-   restx
+    restx
 
 Launch Application
 
-   app run
+    app run
 
 enter 'stop' to stop the running application
 
